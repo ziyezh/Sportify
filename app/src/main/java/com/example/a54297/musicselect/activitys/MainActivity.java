@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView(){
-        initNavBar(false,"SRTP音乐",true);
+        initNavBar(false,"自音乐",true);
 
         mRvGrid = fd(R.id.rv_grid);
         mRvGrid.setLayoutManager(new GridLayoutManager(this,3));
