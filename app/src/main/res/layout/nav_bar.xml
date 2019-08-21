@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/navBarTitleSize"
         android:textColor="@android:color/white"
-        android:text="SRTP项目"
+        android:text="自音乐"
         android:layout_gravity="center"
         />
 
