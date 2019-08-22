@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.EncodeUtils;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.example.a54297.musicselect.Help.LoginHelp;
 import com.example.a54297.musicselect.Help.RealmHelp;
 import com.example.a54297.musicselect.Help.UserHelp;
 import com.example.a54297.musicselect.R;
@@ -130,6 +131,13 @@ public class UserUtils {
         userModel.setPassword(EncryptUtils.encryptMD5ToString(password));
 
         saveUser(userModel);
+
+        /**
+         * 测试MySql
+         */
+        LoginHelp loginHelp = new LoginHelp(phone,password);
+        loginHelp.start();
+
         return true;
     }
 
