@@ -1,12 +1,9 @@
 package com.example.a54297.musicselect.views;
 
-import android.app.Application;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -21,14 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.a54297.musicselect.Help.MediaPlayHelp;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.models.MusicModel;
 import com.example.a54297.musicselect.services.MusicService;
-
-import java.security.PublicKey;
-
-import io.realm.annotations.Required;
 
 public class PlayMusicView extends FrameLayout {
 
@@ -64,18 +56,18 @@ public class PlayMusicView extends FrameLayout {
     }
 
     private void init (Context context){
-      mContext = context;
-      mView =  LayoutInflater.from(mContext).inflate(R.layout.play_music,this,false);
-      mFlPlayMusic = mView.findViewById(R.id.fl_play_music);
-      mFlPlayMusic.setOnClickListener(new OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              trigger();
-          }
-      });
-      mIvIcon = mView.findViewById(R.id.iv_icon1);
-      mIvNeedle = mView.findViewById(R.id.iv_needle);
-      mIvPlay = mView.findViewById(R.id.iv_play);
+        mContext = context;
+        mView =  LayoutInflater.from(mContext).inflate(R.layout.play_music,this,false);
+        mFlPlayMusic = mView.findViewById(R.id.fl_play_music);
+        mFlPlayMusic.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trigger();
+            }
+        });
+        mIvIcon = mView.findViewById(R.id.iv_icon1);
+        mIvNeedle = mView.findViewById(R.id.iv_needle);
+        mIvPlay = mView.findViewById(R.id.iv_play);
 
 
         /**
@@ -86,17 +78,19 @@ public class PlayMusicView extends FrameLayout {
          * 2、startAnimation 执行动画
          */
 
-       mPlayMusicAnim = AnimationUtils.loadAnimation(mContext,R.anim.play_music_anim);
-       mPlayNeedleAnim  = AnimationUtils.loadAnimation(mContext,R.anim.play_needle_anim);
-       mStopNeedleAnim  = AnimationUtils.loadAnimation(mContext,R.anim.stop_needle_anim);
+        mPlayMusicAnim = AnimationUtils.loadAnimation(mContext,R.anim.play_music_anim);
+        mPlayNeedleAnim  = AnimationUtils.loadAnimation(mContext,R.anim.play_needle_anim);
+        mStopNeedleAnim  = AnimationUtils.loadAnimation(mContext,R.anim.stop_needle_anim);
 
 
-       addView(mView);
+        addView(mView);
 
 
     }
 
-//   切换播放状态
+    /**
+     * 切换播放状态
+     */
     private void trigger(){
         if(isPlaying){
             stopMusic();
@@ -112,7 +106,7 @@ public class PlayMusicView extends FrameLayout {
         mFlPlayMusic.startAnimation(mPlayMusicAnim);
         mIvNeedle.startAnimation(mPlayNeedleAnim);
 
-       startMusicService();
+        startMusicService();
 
     }
 
@@ -121,62 +115,58 @@ public class PlayMusicView extends FrameLayout {
         mFlPlayMusic.clearAnimation();
         mIvNeedle.startAnimation(mStopNeedleAnim);
         mIvPlay.setVisibility(View.VISIBLE);
-        if(mMusicBind !=null)
+        if(mMusicBind !=null) {
             mMusicBind.stopMusic();
-}
+        }
+    }
 
-//光盘显示的音乐封面图片
+    /**
+     * 光盘显示的音乐封面图片
+     */
     public void setMusicIcon(){
-//            Glide.with(mContext)
-//                    .load(icon)
-//                    .into(mIvIcon);
-        if(mContext !=null)
+        if(mContext !=null) {
             Glide.with(mContext)
                     .load(mMusicModel.getPoster())
                     .into(mIvIcon);
+        }
     }
 
     public void setMusic(MusicModel music){
         mMusicModel = music;
         setMusicIcon();
     }
-/**
- * 启动音乐服务
- */
 
-        private void startMusicService(){
-            if(mServiceIntent ==null){
-                mServiceIntent = new Intent(mContext,MusicService.class);
-                mContext.startService(mServiceIntent);
-            }else {
-                mMusicBind.playMusic();
-            }
-            if(!isBindService){
-                isBindService = true;
-                mContext.bindService(mServiceIntent,conn,Context.BIND_AUTO_CREATE);
-            }
+    private void startMusicService(){
+        if(mServiceIntent ==null){
+            mServiceIntent = new Intent(mContext,MusicService.class);
+            mContext.startService(mServiceIntent);
+        }else {
+            mMusicBind.playMusic();
+        }
+        if(!isBindService){
+            isBindService = true;
+            mContext.bindService(mServiceIntent,conn,Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    public void destroy(){
+
+        if(isBindService){
+            isBindService = false;
+            mContext.unbindService(conn);
+        }
+    }
+
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mMusicBind = (MusicService.MusicBind) service;
+            mMusicBind.setMusic(mMusicModel);
+            mMusicBind .playMusic();
         }
 
-        public void destroy(){
-
-            if(isBindService){
-                isBindService = false;
-                mContext.unbindService(conn);
-            }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
         }
-
-        ServiceConnection conn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mMusicBind = (MusicService.MusicBind) service;
-                mMusicBind.setMusic(mMusicModel);
-                mMusicBind .playMusic();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-
-        };
+    };
 }

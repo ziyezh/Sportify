@@ -1,4 +1,4 @@
-package com.example.a54297.musicselect.activitys;
+package com.example.a54297.musicselect.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,11 +13,23 @@ public class BaseActivity extends Activity {
 
     private ImageView mIvBack, mIvMe;
     private TextView mTvTitle;
-    //findviewbyid
+
+    /**
+     * findviewbyid的缩写函数
+     * @param id findviewbyid所需参数
+     * @param <T> findviewbyid泛型
+     * @return findviewbyid函数
+     */
     protected  <T extends View> T fd(@IdRes int id){
         return findViewById(id);
     }
-    //初始化navigationBar
+
+    /**
+     * 初始化navigationBar
+     * @param isShowBack 是否展示后退键
+     * @param title 标题
+     * @param isShowMe 是否展示“我”的界面点击按钮
+     */
     protected  void initNavBar(boolean isShowBack,String title,boolean isShowMe){
         mIvBack = findViewById(R.id.iv_back);
         mTvTitle = fd(R.id.tv_title);

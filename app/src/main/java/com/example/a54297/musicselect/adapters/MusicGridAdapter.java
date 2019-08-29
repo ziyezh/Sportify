@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.a54297.musicselect.R;
-import com.example.a54297.musicselect.activitys.AlbumListActivity;
+import com.example.a54297.musicselect.activities.AlbumListActivity;
 import com.example.a54297.musicselect.models.AlbumModel;
 
 import java.util.List;
@@ -22,9 +22,9 @@ public class MusicGridAdapter extends RecyclerView.Adapter<MusicGridAdapter.View
     private Context mContext;
     private List<AlbumModel> mDataSource;
 
-   public MusicGridAdapter(Context context,List<AlbumModel> DataSource){
+   public MusicGridAdapter(Context context,List<AlbumModel> dataSource){
        mContext = context;
-       this.mDataSource = DataSource;
+       this.mDataSource = dataSource;
    }
 
     @NonNull

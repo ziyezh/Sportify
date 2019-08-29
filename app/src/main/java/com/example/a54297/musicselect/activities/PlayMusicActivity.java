@@ -1,9 +1,7 @@
-package com.example.a54297.musicselect.activitys;
+package com.example.a54297.musicselect.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,7 +62,10 @@ public class PlayMusicActivity extends BaseActivity{
         mPlayMusicView.playMusic();
     }
 
-    //后退按钮点击事件
+    /**
+     * 后退按钮点击事件
+     * @param view 后退按钮
+     */
     public void onBackClick(View view){
         onBackPressed();
     }

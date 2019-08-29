@@ -13,9 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.a54297.musicselect.R;
-import com.example.a54297.musicselect.activitys.PlayMusicActivity;
+import com.example.a54297.musicselect.activities.PlayMusicActivity;
 import com.example.a54297.musicselect.models.MusicModel;
-import com.example.a54297.musicselect.views.PlayMusicView;
 
 import java.util.List;
 
@@ -70,7 +69,9 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     }
 
     private void setRecyclerViewHeight(){
-        if(isCalculationRvHeight || mRv ==null) return;
+        if(isCalculationRvHeight || mRv ==null) {
+            return;
+        }
         isCalculationRvHeight = true;
         //获取itemview高度
       RecyclerView.LayoutParams itemViewLp = (RecyclerView.LayoutParams) mItemView.getLayoutParams();

@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import com.example.a54297.musicselect.Help.UserHelp;
 import com.example.a54297.musicselect.constants.SPConstants;
 
-import java.util.ConcurrentModificationException;
-
 public class SPUtils {
 
     /**
@@ -39,7 +37,11 @@ public class SPUtils {
         return  result;
     }
 
-    //删除标记
+    /**
+     * 删除标记
+     * @param context 用户标记
+     * @return 是否成功
+     */
     public static boolean removeUser(Context context){
       SharedPreferences sp =  context.getSharedPreferences(SPConstants.SP_NAME_USER,Context.MODE_PRIVATE);
        SharedPreferences.Editor editor = sp.edit();

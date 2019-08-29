@@ -10,7 +10,7 @@ import android.os.IBinder;
 
 import com.example.a54297.musicselect.Help.MediaPlayHelp;
 import com.example.a54297.musicselect.R;
-import com.example.a54297.musicselect.activitys.WelcomeActivity;
+import com.example.a54297.musicselect.activities.WelcomeActivity;
 import com.example.a54297.musicselect.models.MusicModel;
 
 

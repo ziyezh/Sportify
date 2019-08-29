@@ -49,7 +49,9 @@ public class InputView extends FrameLayout {
     }
 
     private void init(Context context,AttributeSet attrs){
-        if(attrs ==null) return;
+        if(attrs ==null) {
+            return;
+        }
 //        获取自定义属性
        TypedArray typedArray =  context.obtainStyledAttributes(attrs, R.styleable.inputView);
        inputIcon = typedArray.getResourceId(R.styleable.inputView_input_icon,R.mipmap.logo);

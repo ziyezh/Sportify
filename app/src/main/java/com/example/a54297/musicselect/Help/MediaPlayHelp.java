@@ -3,7 +3,6 @@ package com.example.a54297.musicselect.Help;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.widget.ScrollView;
 
 import java.io.IOException;
 
@@ -41,7 +40,6 @@ public class MediaPlayHelp {
      *  2、start： 播放音乐
      *  3、path: 暂停播放
      */
-
     public void setPath(String path){
         /**
          * 1、音乐正在播放：重置音乐播放状态
@@ -90,7 +88,9 @@ public class MediaPlayHelp {
     }
 
     public void start(){
-        if(mMediaPlayer.isPlaying()) return;
+        if(mMediaPlayer.isPlaying()) {
+            return;
+        }
         mMediaPlayer.start();
     }
 

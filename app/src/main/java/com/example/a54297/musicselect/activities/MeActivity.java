@@ -1,7 +1,6 @@
-package com.example.a54297.musicselect.activitys;
+package com.example.a54297.musicselect.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;

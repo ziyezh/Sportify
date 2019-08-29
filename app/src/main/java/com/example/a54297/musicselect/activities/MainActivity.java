@@ -1,10 +1,11 @@
-package com.example.a54297.musicselect.activitys;
+package com.example.a54297.musicselect.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.a54297.musicselect.Help.RealmHelp;
 import com.example.a54297.musicselect.R;

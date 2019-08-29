@@ -1,9 +1,7 @@
 package com.example.a54297.musicselect.Help;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
-import com.example.a54297.musicselect.activitys.AlbumListActivity;
 import com.example.a54297.musicselect.migration.Migration;
 import com.example.a54297.musicselect.models.AlbumModel;
 import com.example.a54297.musicselect.models.MusicModel;
@@ -46,23 +44,28 @@ public class RealmHelp {
                 .build();
     }
 
-    //关闭数据库
+    /**
+     * 关闭数据库
+     */
     public void close(){
         if(mRealm != null && !mRealm.isClosed()){
             mRealm.close();
         }
     }
+
     /**
      * 保存用户信息
      */
     public void saveUser (UserModel userModel){
         mRealm.beginTransaction();
         mRealm.insert(userModel);
-//        mRealm.insertOrUpdate(userModel);
         mRealm.commitTransaction();
     }
 
-    //返回所有用户
+    /**
+     * 返回所有用户
+     * @return 用户集
+     */
     public List<UserModel> getAllUser(){
         RealmQuery<UserModel> query = mRealm.where(UserModel.class);
         RealmResults<UserModel> results = query.findAll();
@@ -90,7 +93,6 @@ public class RealmHelp {
     /**
      * 修改密码
      */
-
     public void changePassword(String password){
         UserModel userModel = getUser();
         mRealm.beginTransaction();

@@ -1,9 +1,7 @@
-package com.example.a54297.musicselect.activitys;
+package com.example.a54297.musicselect.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.utils.UserUtils;
