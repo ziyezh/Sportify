@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void run() {
                 //向服务器发送请求
-                String path="http://47.98.168.203:8080/Server/login?uname="+phone+"&upwd="+password;
+                String path="http://47.98.168.203:8080/MusicSelectServer/login?uname="+phone+"&upwd="+password;
                 String str="";
                 try{
                     URL url = new URL(path);

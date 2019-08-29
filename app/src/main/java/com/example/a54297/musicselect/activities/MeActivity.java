@@ -80,7 +80,6 @@ public class MeActivity extends BaseActivity {
             int sensorType = sensorEvent.sensor.getType();
             float[] value = sensorEvent.values;
             switch (sensorType) {
-
                 case Sensor.TYPE_LIGHT:
                     light = value[0];
                     holding.setLight(light);
@@ -99,6 +98,8 @@ public class MeActivity extends BaseActivity {
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
                     geomagnetic = value;
+                    break;
+                default:
                     break;
             }
 
