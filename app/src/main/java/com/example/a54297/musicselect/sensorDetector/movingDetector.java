@@ -1,15 +1,23 @@
 package com.example.a54297.musicselect.sensorDetector;
-
 import android.content.Context;
 import  android.util.Log;
-//返回用户的运动状态
-//0静止，1慢走，2快走，3慢跑，4快跑，5加载，6摇晃
+import android.widget.Toast;
+/*
+ *    author chenzhentao liuguiyi a
+ *    date 8.27 8.28 8.29
+ *
+ *    根据以下文章更改：
+ *    版权声明：本文为CSDN博主「finnfu」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
+ *    原文链接：https://blog.csdn.net/finnfu/article/details/78543622
+ */
 public class movingDetector {
+
     //存放三轴数据
     float[] oriValues = new float[3];
     final int ValueNum = 4;
     //用于存放计算阈值的波峰波谷差值
     float[] tempValue = new float[ValueNum];
+
     int tempCount = 0;
     //是否上升的标志位
     boolean isDirectionUp = false;
@@ -40,16 +48,19 @@ public class movingDetector {
     //初始阈值
     float ThreadValue = (float) 2.0;
     //波峰波谷时间差
-    int TimeInterval = 250;
+    int TimeInterval = 100;
     //设置状态
     int result = 0;
-
+    //new extra↓
+    float[] stepTime = new float[10];
+    float[] peakValues = new float[5];
+    int peaks=0;//波峰值及波峰数目
 
     private int stepCount = 0;
     private long timeOfLastStep = 0;
     private long timeOfThisStep = 0;
-    private long averageTimeOfEveryStep = 0;
-    //输入需要该信息的界面
+    private float averageTimeOfEveryStep = 0;
+    private float peakValue = 0;
     private Context c;
     private int holdingStyles;
     public movingDetector(Context c){
@@ -57,12 +68,11 @@ public class movingDetector {
         holdingStyles = 0;
     }
 
-
-
     //数据的输入口
     public int inputValue(float value, int gesture){
-        detectorNewStep(value);
+
         holdingStyles = gesture;
+        detectorNewStep(value);
         return result;
     }
 
@@ -73,123 +83,154 @@ public class movingDetector {
      * 3.符合时间差条件，波峰波谷差值大于initialValue，则将该差值纳入阈值的计算中
      * */
     public void detectorNewStep(float values) {
-            if(gravityOld == 0) {
-                gravityOld = values;
-            }else {
 
-                boolean check = detectorPeak(values, gravityOld);
-                if (check) {
-                    timeOfLastPeak = timeOfThisPeak;
-                    timeOfNow = System.currentTimeMillis();
-                    if (timeOfNow - timeOfLastPeak >= TimeInterval
-                            && (peakOfWave - valleyOfWave >= ThreadValue)) {
-                        timeOfThisPeak = timeOfNow;
+        if(gravityOld == 0.0) {
+            gravityOld = values;
+
+        }else {
+            boolean check = detectorPeak(values, gravityOld);
+            if (check) {
+                timeOfLastPeak = timeOfThisPeak;
+                timeOfNow = System.currentTimeMillis();
+                if ((timeOfNow - timeOfLastPeak >= TimeInterval) && (peakOfWave - valleyOfWave >= ThreadValue)) {
+                    timeOfThisPeak = timeOfNow;
                     /*
                      走路或者跑步的识别
                      * */
-                        result = countStep();
-                        System.out.println("===result==="+result+"===averageTimeOfEveryStep==="+averageTimeOfEveryStep);
-                    }
-
-                    if (timeOfNow - timeOfLastPeak >= TimeInterval
-                            && (peakOfWave - valleyOfWave >= InitialValue)) {
-                        timeOfThisPeak = timeOfNow;
-                        ThreadValue = peakValleyThread(peakOfWave - valleyOfWave);
-                    }
+                    result = countStep();
                 }
 
+                if (timeOfNow - timeOfLastPeak >= TimeInterval && (peakOfWave - valleyOfWave >= InitialValue)) {
+                    timeOfThisPeak = timeOfNow;
+                    ThreadValue = peakValleyThread(peakOfWave - valleyOfWave);
+                }
             }
-            gravityOld = values;
+
+        }
+        gravityOld = values;
     }
 
 
     private int countStep() {
+        Log.i("=====","===countStep===  "+result+"===");
         timeOfLastStep = timeOfThisStep;
         timeOfThisStep = System.currentTimeMillis();
         long diffValue = timeOfThisStep - timeOfLastStep;
-        if (diffValue <= 3000) {
-            averageTimeOfEveryStep += diffValue;
+        System.out.print("==result===" + result + "===averageStepTime===" + averageTimeOfEveryStep+ " stepNum="+stepCount+ " style="+holdingStyles );
+        if (diffValue < 1500) {//else 超时重置
             if (stepCount < 9){
+                stepTime[stepCount]=diffValue;
                 stepCount++;
-                return 5;
-            }else if(stepCount == 9) {
-                averageTimeOfEveryStep = averageTimeOfEveryStep / 10;//计算运动速度
-                Log.i("result", "averageTimeOfEveryStep: " + averageTimeOfEveryStep);
-                //确定运动状态
-                //确定手机握持状态
-                switch (holdingStyles){
-                    //手机在裤子口袋中
-                    case 0:{
-                        if (averageTimeOfEveryStep < 10) {
-                            Log.i("result", "快跑");
-                            return 4;
-                        } else if (averageTimeOfEveryStep >= 10 && averageTimeOfEveryStep < 50) {
-                            Log.i("result", "慢跑");
-                            return 3;
-                        } else if (averageTimeOfEveryStep >= 50 && averageTimeOfEveryStep < 100) {
-                            Log.i("result", "快走");
-                            return 2;
-                        } else if (averageTimeOfEveryStep >= 100 && averageTimeOfEveryStep < 500) {
-                            Log.i("result", "慢走");
-                            return 1;
-                        } else {
-                            Log.i("result", "静止");
-                            return 0;
-                        }
-                    }
-                    //手机在身体正面握持状态下
-                    case 2: {
-                        if (averageTimeOfEveryStep < 50) {
-                            Log.i("result", "快跑");
-                            return 4;
-                        } else if (averageTimeOfEveryStep >= 50 && averageTimeOfEveryStep < 200) {
-                            Log.i("result", "慢跑");
-                            return 3;
-                        } else if (averageTimeOfEveryStep >= 200 && averageTimeOfEveryStep < 500) {
-                            Log.i("result", "快走");
-                            return 2;
-                        } else if (averageTimeOfEveryStep >= 500 && averageTimeOfEveryStep < 20000) {
-                            Log.i("result", "慢走");
-                            return 1;
-                        } else {
-                            Log.i("result", "静止");
-                            return 0;
-                        }
-                    }
-                    //手机拿手上在身侧，或者身前侧拿
-                    case 5:{
-                        if (averageTimeOfEveryStep < 20) {
-                            Log.i("result", "快跑");
-                            return 4;
-                        } else if (averageTimeOfEveryStep >= 20 && averageTimeOfEveryStep < 50) {
-                            Log.i("result", "慢跑");
-                            return 3;
-                        } else if (averageTimeOfEveryStep >= 50 && averageTimeOfEveryStep < 200) {
-                            Log.i("result", "快走");
-                            return 2;
-                        } else if (averageTimeOfEveryStep >= 200 && averageTimeOfEveryStep < 10000) {
-                            Log.i("result", "慢走");
-                            return 1;
-                        } else {
-                            Log.i("result", "静止");
-                            return 0;
-                        }
-                    }
-                    default:{
-                        if(averageTimeOfEveryStep > 12000) {
-                            return 6;
-                        }
-                        else{
-                            return 0;
-                        }
-                    }
+                averageTimeOfEveryStep = averageStepTime();
+                //return 5;
+            }else if(stepCount == 9||stepCount == 10){//else 重置
+                if(stepTime[9]<10){
+                    stepTime[9]=diffValue;
                 }
-
-            }else{
+                else{
+                    for(int i=1;i<9;i++){
+                        stepTime[i-1]=stepTime[i];
+                    }
+                    stepTime[9]=diffValue;
+                }//更新每一步时间↑
+                stepCount=10;
+                averageTimeOfEveryStep = averageStepTime();//计算运动速度
+                peakValue = averagePeak();
+                Log.i("result","averageTimeOfEveryStep: "+averageTimeOfEveryStep);
+                //确定运动状态
+            }else{//count > 10 处理
                 resSomeValue();
                 return 0;
             }
-        }else{//超时
+
+            switch (holdingStyles){
+                //口袋
+                case 0:{
+                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
+                        if(peakValue < 24){
+                            Log.i("result", "慢" +
+                                    "快走");
+                            return 2;
+                        }else if(peakValue < 35) {
+                            Log.i("result", "慢跑");
+                            return 3;
+                        }else{
+                            Log.i("result", "快跑");
+                            return 4;
+                        }
+                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                        Log.i("result", "走");
+                        return 1;
+                    }  else {
+                        Log.i("result", "静止");
+                        return 0;
+                    }
+                }
+                //手中，身前
+                case 2: {
+                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
+                        if(peakValue < 18){
+                            Log.i("result", "快走");
+                            return 2;
+                        }else if(peakValue < 30) {
+                            Log.i("result", "慢跑");
+                            return 3;
+                        }else{
+                            Log.i("result", "快跑");
+                            return 4;
+                        }
+                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                        Log.i("result", "走");
+                        return 1;
+                    }  else {
+                        Log.i("result", "静止");
+                        return 0;
+                    }
+                }
+                //身侧或者手机侧放
+                case 5:{
+                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
+                        if(peakValue < 20){
+                            Log.i("result", "快走");
+                            return 2;
+                        }else if(peakValue < 32) {
+                            Log.i("result", "慢跑");
+                            return 3;
+                        }else{
+                            Log.i("result", "快跑");
+                            return 4;
+                        }
+                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                        Log.i("result", "走");
+                        return 1;
+                    }  else {
+                        Log.i("result", "静止");
+                        return 0;
+                    }
+                }
+                default:{
+                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
+                        if(peakValue < 24){
+                            Log.i("result", "慢" +
+                                    "快走");
+                            return 2;
+                        }else if(peakValue < 35) {
+                            Log.i("result", "慢跑");
+                            return 3;
+                        }else{
+                            Log.i("result", "快跑");
+                            return 4;
+                        }
+                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                        Log.i("result", "走");
+                        return 1;
+                    }  else {
+                        Log.i("result", "静止");
+                        return 0;
+                    }
+                }//end default
+            }//end switch
+        }else{//超时  diffValue>=1500处理
             resSomeValue();
             return 0;
         }
@@ -200,7 +241,29 @@ public class movingDetector {
         averageTimeOfEveryStep = 0;
     }
 
-
+    public float averageStepTime(){//每一步时间
+        float t=0;
+        for(int i=0;i<stepCount;i++){
+            t += stepTime[i];
+        }
+        if(stepCount>0) {
+            return t/stepCount;
+        } else {
+            return 9999;
+        }
+    }
+    public float averagePeak(){
+        float num=0;
+        for(int i=0;i<peaks;i++){
+            num += peakValues[i];
+        }
+        if(peaks!=0) {
+            return num / peaks;
+        }
+        else {
+            return 99;
+        }
+    }
 
     /*
      * 比较新旧值
@@ -214,7 +277,10 @@ public class movingDetector {
      * 1.观察波形图，可以发现在出现步子的地方，波谷的下一个就是波峰，有比较明显的特征以及差值
      * 2.所以要记录每次的波谷值，为了和下次的波峰做对比
      * */
+
+
     public boolean detectorPeak(float newValue, float oldValue) {
+        Log.i("=====","===detectorPeak===   newValue"+newValue+"==="+oldValue);
         lastStatus = isDirectionUp;
         //总加速度变大记录,当减小时把计数器清零,
         if (newValue >= oldValue) {
@@ -229,12 +295,29 @@ public class movingDetector {
             isDirectionUp = false;
         }
 
-        if (!isDirectionUp && lastStatus
-                && oldValue >= 12) {
+        if (!isDirectionUp && lastStatus && oldValue >= 11.5) {
             peakOfWave = oldValue;
-            return true;
 
-        } else if (!lastStatus && isDirectionUp && oldValue <= 6) {
+            if(peaks<4){
+                // 记录peak值 5个
+                peakValues[peaks]=peakOfWave;
+                peaks++;
+            }else{
+                peaks=5;
+                if(peakValues[4]<10){
+                    peakValues[4]=peakOfWave;
+                }
+                else{
+                    peakValues[0]=peakValues[1];
+                    peakValues[1]=peakValues[2];
+                    peakValues[2]=peakValues[3];
+                    peakValues[3]=peakValues[4];
+                    peakValues[4]=peakOfWave;
+                }
+            }
+
+            return true;
+        } else if (!lastStatus && isDirectionUp && oldValue <= 7.5) {
             valleyOfWave = oldValue;
             return false;
         } else {
@@ -274,21 +357,70 @@ public class movingDetector {
             ave += value[i];
         }
         ave = ave / ValueNum;
-        if (ave >= 8)
+        if (ave >= 8) {
             ave = (float) 4.3;
-        else if (ave >= 7 && ave < 8)
+        } else if (ave >= 7 && ave < 8) {
             ave = (float) 3.3;
-        else if (ave >= 4 && ave < 7)
+        } else if (ave >= 4 && ave < 7) {
             ave = (float) 2.3;
-        else if (ave >= 3 && ave < 4)
+        } else if (ave >= 3 && ave < 4) {
             ave = (float) 2.0;
-        else {
+        } else {
             ave = (float) 1.3;
         }
         return ave;
     }
+//    public void outData_pocket(){//搜索System.out: ==r查看
+//        if(stepCount!=0) {
+//            System.out.print("==result===" + result + "===averageStepTime===" + averageStepTime()+ " stepNum="+stepCount+ " style="+holdingStyles );
+//        }//输出啊啊
+//        String tempStr="";
+//        averageTimeOfEveryStep=(long)averageStepTime();
+//        if (averageTimeOfEveryStep >= 850 && averageTimeOfEveryStep < 1500) {
+//            tempStr="慢走";
+//        } else if (averageTimeOfEveryStep >= 640 && averageTimeOfEveryStep < 850) {
+//            tempStr="  走";
+//        } else if (averageTimeOfEveryStep >= 300 && averageTimeOfEveryStep < 640) {
+//            if(averagePeak()<24)tempStr="  快走";
+//            else if(averagePeak()<35)tempStr="  跑";
+//            else if(averagePeak()<95)tempStr="疾跑";
+//            else tempStr="飞/晃手机";
+//
+//        } else if(averageTimeOfEveryStep >= 1500){
+//            tempStr="  停";
+//        }
+//        else{
+//            tempStr="飞奔";
+//        }
+//        System.out.print(tempStr);
+//        System.out.println(" 波峰波谷："+peakOfWave + valleyOfWave+" 平均波峰："+ averagePeak());
+//    }
+//
+//    public void outData_hand(){//搜索System.out: ==r查看
+//        if(stepCount!=0) {
+//            System.out.print("==result===" + result + "===averageStepTime===" + averageStepTime()+ " stepNum="+stepCount+ " style="+holdingStyles );
+//        }//输出
+//        String tempStr="";
+//        averageTimeOfEveryStep=(long)averageStepTime();
+//        if (averageTimeOfEveryStep >= 850 && averageTimeOfEveryStep < 2000) {
+//            tempStr="慢走";
+//        } else if (averageTimeOfEveryStep >= 650 && averageTimeOfEveryStep < 850) {
+//            tempStr="  走";
+//        } else if (averageTimeOfEveryStep >= 300 && averageTimeOfEveryStep < 650) {
+//            if(averagePeak()<18)tempStr="快走";
+//            else if(averagePeak()<30)tempStr="  跑";
+//            else if(averagePeak()<90)tempStr="疾跑";
+//            else tempStr="飞奔";
+//
+//        } else if(averageTimeOfEveryStep >= 1500){
+//            tempStr="  停";
+//        }
+//        else{
+//            tempStr="飞奔";
+//        }
+//        System.out.print(tempStr);
+//        System.out.println(" 波峰："+peakOfWave +" 平均波峰："+ averagePeak());
+//    }
 
 
-    //版权声明：本文为CSDN博主「finnfu」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
-    //原文链接：https://blog.csdn.net/finnfu/article/details/78543622
 }
