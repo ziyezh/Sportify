@@ -11,28 +11,28 @@ package com.example.a54297.musicselect.Help;
  */
 public class UserHelp {
 
-    private static UserHelp instance;
+  private static UserHelp instance;
 
-    private UserHelp(){};
+  private UserHelp(){};
 
-    public  static UserHelp getInstance(){
+  public  static UserHelp getInstance(){
+    if(instance == null){
+      synchronized (UserHelp.class){
         if(instance == null){
-            synchronized (UserHelp.class){
-                if(instance == null){
-                    instance = new UserHelp();
-                }
-            }
+          instance = new UserHelp();
         }
-        return instance;
+      }
     }
+    return instance;
+  }
 
-    private  String phone;
+  private  String phone;
 
-    public String getPhone() {
-        return phone;
-    }
+  public String getPhone() {
+    return phone;
+  }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 }

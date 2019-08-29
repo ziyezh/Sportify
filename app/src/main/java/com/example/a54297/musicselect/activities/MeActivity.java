@@ -181,7 +181,7 @@ public class MeActivity extends BaseActivity {
     //计算方向角
     public void Orientation(float[] value) {
         if(gravity != null && geomagnetic != null){
-            if(SensorManager.getRotationMatrix(Ro,null,gravity,geomagnetic))
+            if(SensorManager.getRotationMatrix(Ro,null,gravity,geomagnetic)){
                 SensorManager.getOrientation(Ro,value);
                 value[0] = (float) ((360f+value[0]*180f/Math.PI)%360);
                 value[1] = (float) Math.toDegrees(value[1]);
@@ -189,6 +189,7 @@ public class MeActivity extends BaseActivity {
                 holding.setOrien(value);
                 Log.i("====","===Orien[0]==="+value[0]+"===value[1]"+value[1]+"value[2]"+value[2]);
                 System.out.println("=======Orien[0]==="+value[0]+"===value[1]"+value[1]+"value[2]"+value[2]);
+            }
         }
 
     }
