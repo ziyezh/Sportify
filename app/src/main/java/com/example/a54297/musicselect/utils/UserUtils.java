@@ -47,13 +47,13 @@ public class UserUtils {
 //            Toast.makeText(context,"手机号或密码不正确",Toast.LENGTH_SHORT).show();
 //            return false;
 //        }
-         //保存登录标记
-
-        boolean isSave = SPUtils.saveUser(context,phone);
-        if(!isSave){
-
-            return false;
-        }
+//         //保存登录标记
+//
+//        boolean isSave = SPUtils.saveUser(context,phone);
+//        if(!isSave){
+//
+//            return false;
+//        }
         //保存用户信息
         UserHelp.getInstance().setPhone(phone);
 
