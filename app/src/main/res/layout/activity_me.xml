@@ -33,9 +33,30 @@
             android:clickable="true"
             android:background="@drawable/item_commit_select" />
 
-        <Button
+    <Button
            style="@style/commitBtn"
             android:text="退出登录"
             android:layout_marginTop="@dimen/marginSize"
             android:onClick="onLogoutClick"/>
+
+    <TextView
+        android:id="@+id/lightView"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"></TextView>
+
+    <TextView
+        android:id="@+id/accelerometerView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"></TextView>
+
+    <TextView
+        android:id="@+id/orienView"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView" />
 </LinearLayout>
