@@ -8,25 +8,25 @@ import android.util.AttributeSet;
 
 
 public class WEqualsHImaginView extends AppCompatImageView {
-    public WEqualsHImaginView(Context context) {
-        super(context);
-    }
+  public WEqualsHImaginView(Context context) {
+    super(context);
+  }
 
-    public WEqualsHImaginView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public WEqualsHImaginView(Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public WEqualsHImaginView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public WEqualsHImaginView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    super.onMeasure(widthMeasureSpec, widthMeasureSpec);
 
 //      int width = MeasureSpec.getSize(widthMeasureSpec);
 //      int mode = MeasureSpec.getMode(widthMeasureSpec);
 //
-    }
+  }
 }

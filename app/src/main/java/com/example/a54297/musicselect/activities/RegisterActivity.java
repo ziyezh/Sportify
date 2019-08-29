@@ -2,6 +2,8 @@ package com.example.a54297.musicselect.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +19,30 @@ import java.net.URLConnection;
 public class RegisterActivity extends BaseActivity {
 
     private InputView mInputPhone,mInputPassword,mInputPasswordConfirm;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(RegisterActivity.this, "手机号已注册", Toast.LENGTH_LONG).show();
+                    break;
+                case 1:
+                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                    break;
+                case -1:
+                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_LONG).show();
+                    break;
+                case -2:
+                    Toast.makeText(RegisterActivity.this, "连接数据库失败", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,27 +104,35 @@ public class RegisterActivity extends BaseActivity {
                 }
                 if(str.equals("0")){
                     //为0表示要注册的手机号已经存在
-                    //之后添加Toast提示
-                    Log.i("===",str);
+                    //Log.i("===",str);
+                    Message msg = new Message();
+                    msg.what = 0;
+                    handler.sendMessage(msg);
                 }
                 else if(str.equals("-1")){
                     //为-1表示数据库增加操作不成功
-                    //之后添加Toast提示
-                    Log.i("===",str);
+                    //Log.i("===",str);
+                    Message msg = new Message();
+                    msg.what = -1;
+                    handler.sendMessage(msg);
                 }
                 else if(str.equals("1")){
                     //为1表示注册成功
+                    //Log.i("===",str);
+                    Message msg = new Message();
+                    msg.what = 1;
+                    handler.sendMessage(msg);
                     //回到登陆界面
-                    //之后添加Toast提示
-                    Log.i("===",str);
                     Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 else {
                     //数据库连接不成功，服务器代码有问题
-                    //之后添加Toast提示
-                    Log.i("===", str);
+                    //Log.i("===", str);
+                    Message msg = new Message();
+                    msg.what = -2;
+                    handler.sendMessage(msg);
                 }
             }
         }.start();

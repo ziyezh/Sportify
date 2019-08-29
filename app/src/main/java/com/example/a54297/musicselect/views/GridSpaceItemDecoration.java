@@ -32,7 +32,7 @@ public class GridSpaceItemDecoration extends RecyclerView.ItemDecoration {
 //            outRect.left = 0;
 //        }
 
-       LinearLayout.LayoutParams layoutParams =(LinearLayout.LayoutParams) parent.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams =(LinearLayout.LayoutParams) parent.getLayoutParams();
         layoutParams.leftMargin = -mSpace;
         parent.setLayoutParams(layoutParams);
     }
