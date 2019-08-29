@@ -128,7 +128,7 @@ public class UserUtils {
 
     /**
      * 保存用户到数据库
-     * @param userModel
+     * @param userModel 用户
      */
     public static  void saveUser(UserModel userModel){
         RealmHelp realmHelp = new RealmHelp();
@@ -196,16 +196,16 @@ public class UserUtils {
             Toast.makeText(context,"请确认密码",Toast.LENGTH_SHORT).show();
             return false;
         }
-    //验证原密码是否正确
-        RealmHelp realmHelp = new RealmHelp();
-        UserModel userModel = realmHelp.getUser();
-        if(!EncryptUtils.encryptMD5ToString(oldpassword).equals(userModel.getPassword())){
-            Toast.makeText(context,"原密码不正确",Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        realmHelp.changePassword(EncryptUtils.encryptMD5ToString(password));
-        realmHelp.close();
+//    //验证原密码是否正确
+//        RealmHelp realmHelp = new RealmHelp();
+//        UserModel userModel = realmHelp.getUser();
+//        if(!EncryptUtils.encryptMD5ToString(oldpassword).equals(userModel.getPassword())){
+//            Toast.makeText(context,"原密码不正确",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//
+//        realmHelp.changePassword(EncryptUtils.encryptMD5ToString(password));
+//        realmHelp.close();
 
         return true;
     }
