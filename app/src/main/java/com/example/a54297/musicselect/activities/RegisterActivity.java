@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.EncryptUtils;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.utils.UserUtils;
 import com.example.a54297.musicselect.views.InputView;
@@ -72,14 +73,14 @@ public class RegisterActivity extends BaseActivity {
     public void onRegisterClick(View v){
 
         final String phone = mInputPhone.getInputStr();
-        final String password = mInputPassword.getInputStr();
-        String passwordconfirm = mInputPasswordConfirm.getInputStr();
+        final String password = EncryptUtils.encryptMD5ToString(mInputPassword.getInputStr());
+        String passwordConfirm = EncryptUtils.encryptMD5ToString(mInputPasswordConfirm.getInputStr());
 
         /**
          * 1. 检测输入是否为有效的手机号
          * 2. 检测密码和确认密码是都一致
          */
-        boolean result = UserUtils.registerUser(this,phone,password,passwordconfirm);
+        boolean result = UserUtils.registerUser(this,phone,password,passwordConfirm);
 
         if(!result) {
             return;
@@ -119,6 +120,8 @@ public class RegisterActivity extends BaseActivity {
                 else if(str.equals("1")){
                     //为1表示注册成功
                     //Log.i("===",str);
+
+                    //发出注册成功提示信息
                     Message msg = new Message();
                     msg.what = 1;
                     handler.sendMessage(msg);

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.EncryptUtils;
 import com.example.a54297.musicselect.Help.UserHelp;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.utils.SPUtils;
@@ -29,7 +30,7 @@ public class ChangePasswordActivity extends BaseActivity {
 
             switch (msg.what) {
                 case 1:
-                    Toast.makeText(ChangePasswordActivity.this, "密码修改成功", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请重新登录", Toast.LENGTH_LONG).show();
                     break;
                 case 0:
                     Toast.makeText(ChangePasswordActivity.this, "原密码不正确", Toast.LENGTH_LONG).show();
@@ -60,9 +61,9 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     public void onChangePasswordClick(View v){
-        final String oldPassword = mOldPassword.getInputStr();
-        final String password = mPassword.getInputStr();
-        String passwordConfirm = mPasswordConfirm.getInputStr();
+        final String oldPassword = EncryptUtils.encryptMD5ToString(mOldPassword.getInputStr());
+        final String password = EncryptUtils.encryptMD5ToString(mPassword.getInputStr());
+        String passwordConfirm = EncryptUtils.encryptMD5ToString(mPasswordConfirm.getInputStr());
 
        boolean result = UserUtils.changePassword(this,oldPassword,password,passwordConfirm);
        if(!result){

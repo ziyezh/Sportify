@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.EncryptUtils;
+import com.example.a54297.musicselect.Help.RealmHelp;
+import com.example.a54297.musicselect.Help.UserHelp;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.utils.SPUtils;
 import com.example.a54297.musicselect.utils.UserUtils;
@@ -76,7 +79,7 @@ public class LoginActivity extends BaseActivity {
 
     public void onCommitClick(View v){
         final String phone = mInputPhone.getInputStr();
-        final String password = mInputPassword.getInputStr();
+        final String password = EncryptUtils.encryptMD5ToString(mInputPassword.getInputStr());
 
         /**
          * 1. 检测输入是否为有效的手机号
@@ -125,6 +128,14 @@ public class LoginActivity extends BaseActivity {
                     handler.sendMessage(msg);
                     //保存登录标记
                     SPUtils.saveUser(LoginActivity.this,phone);
+                    //保存用户信息
+                    UserHelp.getInstance().setPhone(phone);
+
+                    //保存音乐源数据,目前还是用Realm数据库，之后需要更改
+                    RealmHelp realmHelp = new RealmHelp();
+                    realmHelp.setMusicSource(LoginActivity.this);
+                    realmHelp.close();
+
                     //来到主界面
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
