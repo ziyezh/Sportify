@@ -149,7 +149,7 @@ public class LoginActivity extends BaseActivity {
                     handler.sendMessage(msg);
                 }
                 else {
-                    //数据库连接不成功
+                    //-3表示数据库连接不成功
                     //Log.i("===", str);
                     Message msg = new Message();
                     msg.what = -3;

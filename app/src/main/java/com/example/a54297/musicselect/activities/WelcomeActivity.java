@@ -30,9 +30,6 @@ public class WelcomeActivity extends BaseActivity {
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-//                Log.e("WelcomeActivity","当前线程为："+ Thread.currentThread());
-//                跳转到MainActivity
-//                toMain();
                 toLogin();
                 if(isLogin){
                     toMain();

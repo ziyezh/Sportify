@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="inputView">
         <!--输入框前面的图标-->
-       <attr name="input_icon" format="reference"></attr>
+        <attr name="input_icon" format="reference"></attr>
         <!--输入框提示内容-->
         <attr name="input_hint" format="string"></attr>
         <!--是否需要用密文显示-->
