@@ -45,17 +45,11 @@ public class MusicGridAdapter extends RecyclerView.Adapter<MusicGridAdapter.View
         viewHolder.mTvPlayNum.setText(albumModel.getPlayNum());
         viewHolder.mTvName.setText(albumModel.getName());
 
-        //是不是因为自定义ImageView导致图片加载不出来
-//        Glide.with(mContext)
-//                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562843589372&di=0f0f92993ba23bf128b5d1aae66e0cf8&imgtype=0&src=http%3A%2F%2Fimg6.ph.126.net%2FqGGImIPvJD5o5C7c7lZ-3A%3D%3D%2F2028590157155072446.jpg")
-//                .into( viewHolder.ivIcon2);
-
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,AlbumListActivity.class);
                 intent.putExtra(AlbumListActivity.ALBUM_ID, albumModel.getAlbumId());
-//                intent.putExtra(AlbumListActivity.ALBUM_ID,albumModel.getAlbumId());
                 mContext.startActivity(intent);
             }
         });

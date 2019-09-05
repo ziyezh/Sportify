@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.RecommendActivity"></activity>
         <activity android:name=".activities.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +27,12 @@
         <activity android:name=".activities.ChangePasswordActivity" />
         <activity android:name=".activities.AlbumListActivity" />
         <activity android:name=".activities.PlayMusicActivity" />
+        <activity android:name=".activities.SelectMusicActivity" />
 
         <service
             android:name=".services.MusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>

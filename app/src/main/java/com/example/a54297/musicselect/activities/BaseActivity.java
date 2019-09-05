@@ -11,8 +11,8 @@ import com.example.a54297.musicselect.R;
 
 public class BaseActivity extends Activity {
 
-    private ImageView mIvBack, mIvMe;
-    private TextView mTvTitle;
+    private ImageView mIvBack, mIvMe,mIvHeart,mIvMeMain;
+    private TextView mTvTitle,mTvTitleMain;
 
     /**
      * findviewbyid的缩写函数
@@ -46,6 +46,29 @@ public class BaseActivity extends Activity {
             }
         });
         mIvMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BaseActivity.this,MeActivity.class));
+            }
+        });
+    }
+
+    protected  void initNavBarMain(boolean isShowHeart,String title,boolean isShowMe){
+        mIvHeart = findViewById(R.id.iv_heart);
+        mTvTitleMain = fd(R.id.tv_titlemain);
+        mIvMeMain = fd(R.id.iv_memain);
+
+        mIvHeart.setVisibility(isShowHeart?View.VISIBLE:View.GONE);
+        mIvMeMain.setVisibility(isShowMe?View.VISIBLE:View.GONE);
+        mTvTitleMain.setText(title);
+
+        mIvHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BaseActivity.this,RecommendActivity.class));
+            }
+        });
+        mIvMeMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BaseActivity.this,MeActivity.class));
