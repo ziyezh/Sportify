@@ -105,7 +105,8 @@ public class RecommendActivity extends BaseActivity {
         time=Time;
         activityState=Activities;
         switch (time){
-            case 0://0夜晚===================
+            //0夜晚
+            case 0:
             {
                 switch(activityState){
                     case 0:{
@@ -147,10 +148,13 @@ public class RecommendActivity extends BaseActivity {
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
-            case 1://1上午/清晨=============
+            //1上午/清晨
+            case 1:
             {
                 switch(activityState){
                     case 0:{
@@ -198,6 +202,8 @@ public class RecommendActivity extends BaseActivity {
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
@@ -244,6 +250,8 @@ public class RecommendActivity extends BaseActivity {
                         else{ stateView.setImageResource(R.drawable.noon_run3);}
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
@@ -282,16 +290,22 @@ public class RecommendActivity extends BaseActivity {
                         stateView.setImageResource(R.drawable.evening_run);
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
+            default:
+                break;
         }
     }
 
     public void onChangeDown(View v){
         //改变状态：前一个  同时
         presentState--;
-        if(presentState<0)presentState=4;
+        if(presentState<0){
+            presentState=4;
+        }
         setPic(0,presentState);
         view4.setText(states[presentState]);
 

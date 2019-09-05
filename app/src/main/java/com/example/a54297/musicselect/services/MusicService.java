@@ -12,6 +12,7 @@ import com.example.a54297.musicselect.Help.MediaPlayHelp;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.activities.WelcomeActivity;
 import com.example.a54297.musicselect.models.MusicModel;
+import com.example.a54297.musicselect.models.SongModel;
 
 
 public class MusicService extends Service {
@@ -19,13 +20,13 @@ public class MusicService extends Service {
     public static final int NOTIFICATION_ID = 1;
 
     private MediaPlayHelp mMediaPlayHelp;
-    private MusicModel mMusicModel;
+    private SongModel mMusicModel;
 
     public MusicService() {
     }
 
     public class MusicBind extends Binder{
-        public void setMusic(MusicModel musicModel){
+        public void setMusic(SongModel musicModel){
             mMusicModel = musicModel;
             startForeground();
         }

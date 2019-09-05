@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.models.MusicModel;
+import com.example.a54297.musicselect.models.SongModel;
 import com.example.a54297.musicselect.services.MusicService;
 
 public class PlayMusicView extends FrameLayout {
@@ -31,7 +32,7 @@ public class PlayMusicView extends FrameLayout {
     private FrameLayout mFlPlayMusic;
     private ImageView mIvIcon, mIvNeedle,mIvPlay;
     private boolean isPlaying,isBindService;
-    private MusicModel mMusicModel;
+    private SongModel mMusicModel;
     private Animation mPlayMusicAnim, mPlayNeedleAnim, mStopNeedleAnim;
 
     public PlayMusicView(@NonNull Context context) {
@@ -131,10 +132,12 @@ public class PlayMusicView extends FrameLayout {
         }
     }
 
-    public void setMusic(MusicModel music){
+    public void setMusic(SongModel music){
         mMusicModel = music;
         setMusicIcon();
     }
+
+
 
     private void startMusicService(){
         if(mServiceIntent ==null){
