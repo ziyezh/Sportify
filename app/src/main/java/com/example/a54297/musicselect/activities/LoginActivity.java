@@ -34,7 +34,7 @@ public class LoginActivity extends BaseActivity {
                     Toast.makeText(LoginActivity.this, "密码不正确", Toast.LENGTH_LONG).show();
                     break;
                 case 1:
-                    Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG).show();
                     break;
                 case -1:
                     Toast.makeText(LoginActivity.this, "手机号未注册", Toast.LENGTH_LONG).show();
