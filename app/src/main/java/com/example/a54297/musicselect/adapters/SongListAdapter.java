@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.a54297.musicselect.R;
 import com.example.a54297.musicselect.activities.PlayMusicActivity;
-import com.example.a54297.musicselect.models.MusicModel;
 import com.example.a54297.musicselect.models.SongModel;
 
 import java.util.List;
