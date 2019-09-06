@@ -4,11 +4,8 @@ import  android.util.Log;
 import android.widget.Toast;
 /*
  *    author chenzhentao liuguiyi a
- *    date 8.27 8.28 8.29
+ *    date 8.27 8.28 8.29 9.4
  *
- *    根据以下文章更改：
- *    版权声明：本文为CSDN博主「finnfu」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
- *    原文链接：https://blog.csdn.net/finnfu/article/details/78543622
  */
 public class movingDetector {
 
@@ -44,9 +41,9 @@ public class movingDetector {
     //上次传感器的值
     float gravityOld = 0;
     //动态阈值需要动态的数据，这个值用于这些动态数据的阈值
-    final float InitialValue = (float) 1.3;
+    final float InitialValue = (float) 2;
     //初始阈值
-    float ThreadValue = (float) 2.0;
+    float ThreadValue = (float) 0.7;
     //波峰波谷时间差
     int TimeInterval = 100;
     //设置状态
@@ -54,7 +51,11 @@ public class movingDetector {
     //new extra↓
     float[] stepTime = new float[10];
     float[] peakValues = new float[5];
-    int peaks=0;//波峰值及波峰数目
+    int peaks=0;
+    //波峰值及波峰数目
+    float time1=520,time2=2000;
+    //历史次数
+    int numOfHistory=0;
 
     private int stepCount = 0;
     private long timeOfLastStep = 0;
@@ -71,8 +72,16 @@ public class movingDetector {
     //数据的输入口
     public int inputValue(float value, int gesture){
 
+        if(value<10.2){numOfHistory++;}
+        else {numOfHistory=0;}
+
         holdingStyles = gesture;
         detectorNewStep(value);
+//        outData_all();
+//       System.out.println("返回值返回值返回值=-=返回值返回值"+result);
+        if(numOfHistory>18){
+            return 0;
+        }
         return result;
     }
 
@@ -82,6 +91,7 @@ public class movingDetector {
      * 2.如果检测到了波峰，并且符合时间差以及阈值的条件，则判定为1步
      * 3.符合时间差条件，波峰波谷差值大于initialValue，则将该差值纳入阈值的计算中
      * */
+
     public void detectorNewStep(float values) {
 
         if(gravityOld == 0.0) {
@@ -117,14 +127,16 @@ public class movingDetector {
         timeOfThisStep = System.currentTimeMillis();
         long diffValue = timeOfThisStep - timeOfLastStep;
         System.out.print("==result===" + result + "===averageStepTime===" + averageTimeOfEveryStep+ " stepNum="+stepCount+ " style="+holdingStyles );
-        if (diffValue < 1500) {//else 超时重置
+        if (diffValue < time2) {//else 超时重置
+            //更新每一步时间
             if (stepCount < 9){
                 stepTime[stepCount]=diffValue;
                 stepCount++;
                 averageTimeOfEveryStep = averageStepTime();
+                peakValue = averagePeak();
                 //return 5;
             }else if(stepCount == 9||stepCount == 10){//else 重置
-                if(stepTime[9]<10){
+                if(stepTime[9]<5){
                     stepTime[9]=diffValue;
                 }
                 else{
@@ -143,22 +155,26 @@ public class movingDetector {
                 return 0;
             }
 
+            System.out.println("num of his:"+numOfHistory);
+            if(peakValue<11){
+                return 0;
+            }
             switch (holdingStyles){
                 //口袋
                 case 0:{
-                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
-                        if(peakValue < 24){
+                    if (averageTimeOfEveryStep < time1) {//阈（fa = =||）值要改啊
+                        if(peakValue < 19){
                             Log.i("result", "慢" +
                                     "快走");
                             return 2;
-                        }else if(peakValue < 35) {
+                        }else if(peakValue < 30) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
                             Log.i("result", "快跑");
                             return 4;
                         }
-                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                    } else if (averageTimeOfEveryStep >= time1 && averageTimeOfEveryStep < time2) {
                         Log.i("result", "走");
                         return 1;
                     }  else {
@@ -168,18 +184,18 @@ public class movingDetector {
                 }
                 //手中，身前
                 case 2: {
-                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
-                        if(peakValue < 18){
+                    if (averageTimeOfEveryStep < time1) {//阈（fa = =||）值要改啊
+                        if(peakValue < 16){
                             Log.i("result", "快走");
                             return 2;
-                        }else if(peakValue < 30) {
+                        }else if(peakValue < 22) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
                             Log.i("result", "快跑");
                             return 4;
                         }
-                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                    } else if (averageTimeOfEveryStep >= time1 && averageTimeOfEveryStep < time2) {
                         Log.i("result", "走");
                         return 1;
                     }  else {
@@ -189,18 +205,18 @@ public class movingDetector {
                 }
                 //身侧或者手机侧放
                 case 5:{
-                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
+                    if (averageTimeOfEveryStep < time1) {
                         if(peakValue < 20){
                             Log.i("result", "快走");
                             return 2;
-                        }else if(peakValue < 32) {
+                        }else if(peakValue < 30) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
                             Log.i("result", "快跑");
                             return 4;
                         }
-                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                    } else if (averageTimeOfEveryStep >= time1 && averageTimeOfEveryStep < time2) {
                         Log.i("result", "走");
                         return 1;
                     }  else {
@@ -209,19 +225,19 @@ public class movingDetector {
                     }
                 }
                 default:{
-                    if (averageTimeOfEveryStep < 600) {//阈（fa = =||）值要改啊
-                        if(peakValue < 24){
+                    if (averageTimeOfEveryStep < time1) {
+                        if(peakValue < 16){
                             Log.i("result", "慢" +
                                     "快走");
                             return 2;
-                        }else if(peakValue < 35) {
+                        }else if(peakValue < 22) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
                             Log.i("result", "快跑");
                             return 4;
                         }
-                    } else if (averageTimeOfEveryStep >= 600 && averageTimeOfEveryStep < 1500) {
+                    } else if (averageTimeOfEveryStep >= time1 && averageTimeOfEveryStep < time2) {
                         Log.i("result", "走");
                         return 1;
                     }  else {
@@ -230,7 +246,7 @@ public class movingDetector {
                     }
                 }//end default
             }//end switch
-        }else{//超时  diffValue>=1500处理
+        }else{//超时  diffValue>=2000处理
             resSomeValue();
             return 0;
         }
@@ -246,11 +262,9 @@ public class movingDetector {
         for(int i=0;i<stepCount;i++){
             t += stepTime[i];
         }
-        if(stepCount>0) {
+        if(stepCount>0)
             return t/stepCount;
-        } else {
-            return 9999;
-        }
+        else return 500;
     }
     public float averagePeak(){
         float num=0;
@@ -261,7 +275,7 @@ public class movingDetector {
             return num / peaks;
         }
         else {
-            return 99;
+            return 10;
         }
     }
 
@@ -277,8 +291,6 @@ public class movingDetector {
      * 1.观察波形图，可以发现在出现步子的地方，波谷的下一个就是波峰，有比较明显的特征以及差值
      * 2.所以要记录每次的波谷值，为了和下次的波峰做对比
      * */
-
-
     public boolean detectorPeak(float newValue, float oldValue) {
         Log.i("=====","===detectorPeak===   newValue"+newValue+"==="+oldValue);
         lastStatus = isDirectionUp;
@@ -295,16 +307,15 @@ public class movingDetector {
             isDirectionUp = false;
         }
 
-        if (!isDirectionUp && lastStatus && oldValue >= 11.5) {
+        if (!isDirectionUp && lastStatus && oldValue >= 9.5) {
             peakOfWave = oldValue;
 
-            if(peaks<4){
-                // 记录peak值 5个
+            if(peaks<4){// 记录peak值 5个
                 peakValues[peaks]=peakOfWave;
                 peaks++;
             }else{
                 peaks=5;
-                if(peakValues[4]<10){
+                if(peakValues[4]<5){
                     peakValues[4]=peakOfWave;
                 }
                 else{
@@ -317,7 +328,7 @@ public class movingDetector {
             }
 
             return true;
-        } else if (!lastStatus && isDirectionUp && oldValue <= 7.5) {
+        } else if (!lastStatus && isDirectionUp && oldValue <= 10) {
             valleyOfWave = oldValue;
             return false;
         } else {
@@ -345,7 +356,6 @@ public class movingDetector {
         }
         return tempThread;
     }
-
     /*
      * 梯度化阈值
      * 1.计算数组的均值
@@ -357,18 +367,18 @@ public class movingDetector {
             ave += value[i];
         }
         ave = ave / ValueNum;
-        if (ave >= 8) {
-            ave = (float) 4.3;
-        } else if (ave >= 7 && ave < 8) {
-            ave = (float) 3.3;
-        } else if (ave >= 4 && ave < 7) {
-            ave = (float) 2.3;
-        } else if (ave >= 3 && ave < 4) {
-            ave = (float) 2.0;
-        } else {
+        if (ave >= 8)
+            ave = (float) 4;
+        else if (ave >= 7 && ave < 8)
+            ave = (float) 3;
+        else if (ave >= 4 && ave < 7)
+            ave = (float) 2;
+        else if (ave >= 3 && ave < 4)
+            ave = (float) 1.8;
+        else {
             ave = (float) 1.3;
         }
-        return ave;
+        return (float)0.7;
     }
 //    public void outData_pocket(){//搜索System.out: ==r查看
 //        if(stepCount!=0) {
@@ -421,6 +431,37 @@ public class movingDetector {
 //        System.out.print(tempStr);
 //        System.out.println(" 波峰："+peakOfWave +" 平均波峰："+ averagePeak());
 //    }
-
+//
+//
+//
+//
+    //
+//    public void outData_all(){//搜索System.out: =-=r查看
+//        if(stepCount!=0) {
+//            System.out.println("=-=运动方式:" + result + "  步长:" + averageStepTime()+ " 步数="+stepCount+ " 握机状态="+holdingStyles );
+//        }//输出
+//        else {
+//            System.out.println("步数=0");
+//        }
+//        String tempStr="";
+//        averageTimeOfEveryStep=(long)averageStepTime();
+//        peakValue=averagePeak();
+//        if (averageTimeOfEveryStep < time1) {
+//            if(peakValue < 24){
+//                tempStr="快走";
+//            }else if(peakValue < 35) {
+//                tempStr="慢跑";
+//            }else{
+//                tempStr="快跑";
+//            }
+//        } else if (averageTimeOfEveryStep >= time1 && averageTimeOfEveryStep < time2) {
+//            tempStr="慢走";
+//        }  else {
+//            tempStr="静止";
+//        }
+//        if(peakValue<11)tempStr="静1止";
+//        System.out.print(tempStr);
+//        System.out.println("=-=波峰："+peakOfWave + " 平均波峰："+ averagePeak());
+//    }
 
 }
