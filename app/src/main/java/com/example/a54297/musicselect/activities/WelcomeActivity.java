@@ -30,7 +30,7 @@ public class WelcomeActivity extends BaseActivity {
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                toLogin();
+                //toLogin();
                 if(isLogin){
                     toMain();
                 }else {
