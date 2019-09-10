@@ -162,12 +162,15 @@ public class movingDetector {
             switch (holdingStyles){
                 //口袋
                 case 0:{
-                    if (averageTimeOfEveryStep < time1) {//阈（fa = =||）值要改啊
-                        if(peakValue < 19){
+                    if (averageTimeOfEveryStep < time1) {
+                        if(peakValue<14){
+                            return 1;
+                        }
+                        else if(peakValue < 19){
                             Log.i("result", "慢" +
                                     "快走");
                             return 2;
-                        }else if(peakValue < 30) {
+                        }else if(peakValue < 29) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
@@ -185,10 +188,13 @@ public class movingDetector {
                 //手中，身前
                 case 2: {
                     if (averageTimeOfEveryStep < time1) {//阈（fa = =||）值要改啊
-                        if(peakValue < 16){
+                        if(peakValue<12){
+                            return 1;
+                        }
+                        else if(peakValue < 15){
                             Log.i("result", "快走");
                             return 2;
-                        }else if(peakValue < 22) {
+                        }else if(peakValue < 20) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
@@ -206,10 +212,13 @@ public class movingDetector {
                 //身侧或者手机侧放
                 case 5:{
                     if (averageTimeOfEveryStep < time1) {
-                        if(peakValue < 20){
+                        if(peakValue<13){
+                            return 1;
+                        }
+                        else if(peakValue < 15){
                             Log.i("result", "快走");
                             return 2;
-                        }else if(peakValue < 30) {
+                        }else if(peakValue < 22) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{
@@ -226,11 +235,15 @@ public class movingDetector {
                 }
                 default:{
                     if (averageTimeOfEveryStep < time1) {
-                        if(peakValue < 16){
+
+                        if(peakValue<12){
+                            return 1;
+                        }
+                        else if(peakValue < 15){
                             Log.i("result", "慢" +
                                     "快走");
                             return 2;
-                        }else if(peakValue < 22) {
+                        }else if(peakValue < 20) {
                             Log.i("result", "慢跑");
                             return 3;
                         }else{

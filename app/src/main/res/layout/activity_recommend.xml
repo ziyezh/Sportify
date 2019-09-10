@@ -119,6 +119,14 @@
             android:onClick="onLoading"
             android:src="@mipmap/loading2"
             android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:src="@mipmap/wait"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout

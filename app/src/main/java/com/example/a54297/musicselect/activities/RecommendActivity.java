@@ -126,7 +126,7 @@ public class RecommendActivity extends BaseActivity {
         System.out.println("time值："+time);
         states[0]="休闲";
         states[1]="散步";
-        states[2]="走路";
+        states[2]="步行";
         states[3]="运动";
         states[4]="跑步";
 //        view1=findViewById(R.id.textView1);
@@ -383,6 +383,7 @@ public class RecommendActivity extends BaseActivity {
         imageloading0.setVisibility(View.VISIBLE);
         imageLoading1.setVisibility(View.VISIBLE);
         imageLoading2.setVisibility(View.VISIBLE);
+        frame3.setVisibility(View.VISIBLE);
 
         isUp=true;
         rotateAnimation1.setDuration(5000);						//持续时间
@@ -416,6 +417,7 @@ public class RecommendActivity extends BaseActivity {
             imageloading0.setVisibility(View.INVISIBLE);
             imageLoading1.setVisibility(View.INVISIBLE);
             imageLoading2.setVisibility(View.INVISIBLE);
+            frame3.setVisibility(View.INVISIBLE);
         }
     }  public void toMusic(View v){
         Intent intent = new Intent(this,SelectMusicActivity.class);
