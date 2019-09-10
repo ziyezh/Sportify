@@ -275,9 +275,11 @@ public class movingDetector {
         for(int i=0;i<stepCount;i++){
             t += stepTime[i];
         }
-        if(stepCount>0)
+        if(stepCount>0) {
             return t/stepCount;
-        else return 500;
+        } else {
+            return 500;
+        }
     }
     public float averagePeak(){
         float num=0;
@@ -380,15 +382,15 @@ public class movingDetector {
             ave += value[i];
         }
         ave = ave / ValueNum;
-        if (ave >= 8)
+        if (ave >= 8) {
             ave = (float) 4;
-        else if (ave >= 7 && ave < 8)
+        } else if (ave >= 7 && ave < 8) {
             ave = (float) 3;
-        else if (ave >= 4 && ave < 7)
+        } else if (ave >= 4 && ave < 7) {
             ave = (float) 2;
-        else if (ave >= 3 && ave < 4)
+        } else if (ave >= 3 && ave < 4) {
             ave = (float) 1.8;
-        else {
+        } else {
             ave = (float) 1.3;
         }
         return (float)0.7;
