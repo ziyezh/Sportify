@@ -1,35 +1,12 @@
 # Sportify
 
-## 项目内容
+## Music for Sports App
 
-实现一个智能推荐歌曲的功能，通过环境、温度、手机所处状态用智能算法智能给用户推荐适合的歌曲。预期是，在不同的工作环境下，通过采集获取手机各传感器数据，综合分析出手机用户当前所处的场景情境，并据此自适应地选择最适合当前状态的歌单并播放，达到更佳的音乐播放器用户使用体验。
-
-#### 软件架构
-软件架构说明
+An app recommends playlists that perfectly match users’ running, cycling, and walking paces with smartphone sensor data.
 
 
-#### 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-### Tips
-
-1. 保存用户登录状态，无需重复登陆
-2. MD5加密
-3. 识别运动状态+手动选择
-4. 记住用户登录状态，不用每次打开都进行登陆
+#### Technical Points
+1. Detected running paces by Sensor API and calculated speed with pre-trained ML model
+2. Classified songs based on music tempos with SVM and mapped running paces to different playlists
+3. Implemented music player UI with Android and React Native
+4. Stored user info and listening history to Realm and MySQL database and deployed service on the AliCloud EC2 instances
